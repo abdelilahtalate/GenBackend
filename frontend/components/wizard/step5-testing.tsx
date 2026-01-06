@@ -37,9 +37,9 @@ export function Step5Testing({ features, projectId }: Step5Props) {
     const fetchSuggestions = async () => {
       const featureType =
         currentFeature.feature_type?.toUpperCase() ||
-        (currentFeature.name.includes('Functions') || currentFeature.name.startsWith('Function') ? 'FUNCTIONS' :
-          currentFeature.name.includes('Auth') ? 'AUTH' :
-            currentFeature.name.includes('Analytics') ? 'ANALYTICS' : 'CRUD')
+        (currentFeature.name === 'Functions' || currentFeature.name === 'Function' ? 'FUNCTIONS' :
+          currentFeature.name === 'Auth' ? 'AUTH' :
+            currentFeature.name === 'Analytics' ? 'ANALYTICS' : 'CRUD')
 
       const { data } = await aiApi.getSuggestedPrompts('test_data', {
         name: currentFeature.name,
@@ -57,9 +57,9 @@ export function Step5Testing({ features, projectId }: Step5Props) {
   useEffect(() => {
     if (currentFeature) {
       const type = currentFeature.feature_type?.toUpperCase() ||
-        (currentFeature.name.includes('Auth') ? 'AUTH' :
-          currentFeature.name.includes('Analytics') ? 'ANALYTICS' :
-            (currentFeature.name.includes('Functions') || currentFeature.name.startsWith('Function')) ? 'FUNCTIONS' : 'CRUD');
+        (currentFeature.name === 'Auth' ? 'AUTH' :
+          currentFeature.name === 'Analytics' ? 'ANALYTICS' :
+            (currentFeature.name === 'Functions' || currentFeature.name === 'Function') ? 'FUNCTIONS' : 'CRUD');
 
       if (type === 'AUTH') {
         setEndpoint('/api/auth/login')
@@ -83,9 +83,9 @@ export function Step5Testing({ features, projectId }: Step5Props) {
       // Pass the features config (schema) to the backend
       const featureType =
         currentFeature?.feature_type?.toUpperCase() ||
-        (currentFeature?.name?.includes('Functions') || currentFeature?.name?.startsWith('Function') ? 'FUNCTIONS' :
-          currentFeature?.name?.includes('Auth') ? 'AUTH' :
-            currentFeature?.name?.includes('Analytics') ? 'ANALYTICS' : 'CRUD')
+        (currentFeature?.name === 'Functions' || currentFeature?.name === 'Function' ? 'FUNCTIONS' :
+          currentFeature?.name === 'Auth' ? 'AUTH' :
+            currentFeature?.name === 'Analytics' ? 'ANALYTICS' : 'CRUD')
 
       const result = await featuresApi.test(
         endpoint,
@@ -148,9 +148,9 @@ export function Step5Testing({ features, projectId }: Step5Props) {
     setGeneratingData(true)
     const featureType =
       currentFeature.feature_type?.toUpperCase() ||
-      (currentFeature.name.includes('Functions') || currentFeature.name.startsWith('Function') ? 'FUNCTIONS' :
-        currentFeature.name.includes('Auth') ? 'AUTH' :
-          currentFeature.name.includes('Analytics') ? 'ANALYTICS' : 'CRUD')
+      (currentFeature.name === 'Functions' || currentFeature.name === 'Function' ? 'FUNCTIONS' :
+        currentFeature.name === 'Auth' ? 'AUTH' :
+          currentFeature.name === 'Analytics' ? 'ANALYTICS' : 'CRUD')
 
     try {
       const { data, error } = await aiApi.generateTestData(
@@ -212,9 +212,9 @@ export function Step5Testing({ features, projectId }: Step5Props) {
               </button>
               <div className="text-[10px] px-2 py-0.5 rounded-full bg-surface-secondary border border-border text-muted-foreground font-mono">
                 {(currentFeature?.feature_type?.toUpperCase() ||
-                  (currentFeature?.name?.includes('Functions') || currentFeature?.name?.startsWith('Function') ? 'FUNCTIONS' :
-                    currentFeature?.name?.includes('Auth') ? 'AUTH' :
-                      currentFeature?.name?.includes('Analytics') ? 'ANALYTICS' : 'CRUD'))} TEST
+                  (currentFeature?.name === 'Functions' || currentFeature?.name === 'Function' ? 'FUNCTIONS' :
+                    currentFeature?.name === 'Auth' ? 'AUTH' :
+                      currentFeature?.name === 'Analytics' ? 'ANALYTICS' : 'CRUD'))} TEST
               </div>
             </div>
           </div>
@@ -222,15 +222,15 @@ export function Step5Testing({ features, projectId }: Step5Props) {
           {showDetails && (
             <div className="p-4 bg-surface-secondary/50 rounded-lg border border-border animate-in fade-in slide-in-from-top-2 duration-300">
               <div className="flex items-center gap-2 mb-3 text-xs font-semibold text-primary uppercase tracking-wider">
-                {currentFeature?.feature_type?.toUpperCase() === 'FUNCTIONS' || currentFeature?.name?.includes('Function') ? <Zap className="w-3 h-3" /> :
-                  currentFeature?.feature_type?.toUpperCase() === 'AUTH' || currentFeature?.name?.includes('Auth') ? <Shield className="w-3 h-3" /> :
-                    currentFeature?.feature_type?.toUpperCase() === 'ANALYTICS' || currentFeature?.name?.includes('Analytics') ? <BarChart3 className="w-3 h-3" /> :
+                {currentFeature?.feature_type?.toUpperCase() === 'FUNCTIONS' || currentFeature?.name === 'Functions' || currentFeature?.name === 'Function' ? <Zap className="w-3 h-3" /> :
+                  currentFeature?.feature_type?.toUpperCase() === 'AUTH' || currentFeature?.name === 'Auth' ? <Shield className="w-3 h-3" /> :
+                    currentFeature?.feature_type?.toUpperCase() === 'ANALYTICS' || currentFeature?.name === 'Analytics' ? <BarChart3 className="w-3 h-3" /> :
                       <Database className="w-3 h-3" />}
                 {currentFeature?.name} Configuration
               </div>
 
               {/* Function Details */}
-              {(currentFeature?.feature_type?.toUpperCase() === 'FUNCTIONS' || currentFeature?.name?.includes('Function')) && (
+              {(currentFeature?.feature_type?.toUpperCase() === 'FUNCTIONS' || currentFeature?.name === 'Functions' || currentFeature?.name === 'Function') && (
                 <div className="space-y-2">
                   <div className="text-[10px] text-muted-foreground font-mono bg-background/50 p-2 rounded border border-border/50 max-h-60 overflow-auto">
                     <pre className="text-primary/80">{currentFeature.config?.code || '# No code defined'}</pre>
@@ -243,7 +243,7 @@ export function Step5Testing({ features, projectId }: Step5Props) {
               )}
 
               {/* CRUD Details */}
-              {(currentFeature?.feature_type?.toUpperCase() === 'CRUD' || (!currentFeature?.feature_type && !currentFeature?.name?.includes('Auth') && !currentFeature?.name?.includes('Analytics') && !currentFeature?.name?.includes('Function'))) && (
+              {(currentFeature?.feature_type?.toUpperCase() === 'CRUD' || (!currentFeature?.feature_type && currentFeature?.name !== 'Auth' && currentFeature?.name !== 'Analytics' && currentFeature?.name !== 'Functions' && currentFeature?.name !== 'Function')) && (
                 <div className="space-y-2">
                   <div className="text-[10px] font-medium text-muted-foreground mb-1">Table: <span className="text-foreground font-mono">{currentFeature?.config?.table || currentFeature?.name?.toLowerCase()}</span></div>
                   <div className="grid grid-cols-2 gap-2">
@@ -258,7 +258,7 @@ export function Step5Testing({ features, projectId }: Step5Props) {
               )}
 
               {/* Auth Details */}
-              {(currentFeature?.feature_type?.toUpperCase() === 'AUTH' || currentFeature?.name?.includes('Auth')) && (
+              {(currentFeature?.feature_type?.toUpperCase() === 'AUTH' || currentFeature?.name === 'Auth') && (
                 <div className="space-y-3">
                   <div className="flex flex-wrap gap-2">
                     {currentFeature.config?.providers?.map((p: string) => (
@@ -277,7 +277,7 @@ export function Step5Testing({ features, projectId }: Step5Props) {
               )}
 
               {/* Analytics Details */}
-              {(currentFeature?.feature_type?.toUpperCase() === 'ANALYTICS' || currentFeature?.name?.includes('Analytics')) && (
+              {(currentFeature?.feature_type?.toUpperCase() === 'ANALYTICS' || currentFeature?.name === 'Analytics') && (
                 <div className="space-y-2">
                   {currentFeature.config?.reports?.map((report: any, idx: number) => (
                     <div key={idx} className="p-2 bg-background/50 rounded border border-border/50 space-y-1">
@@ -303,7 +303,7 @@ export function Step5Testing({ features, projectId }: Step5Props) {
             </div>
           )}
 
-          {(currentFeature?.feature_type?.toUpperCase() === 'AUTH' || currentFeature?.name?.includes('Auth')) && (
+          {(currentFeature?.feature_type?.toUpperCase() === 'AUTH' || currentFeature?.name === 'Auth') && (
             <AuthTestPresets
               config={currentFeature?.config}
               onSelect={(preset: any) => {
@@ -314,7 +314,7 @@ export function Step5Testing({ features, projectId }: Step5Props) {
             />
           )}
 
-          {(currentFeature?.feature_type?.toUpperCase() === 'ANALYTICS' || currentFeature?.name?.includes('Analytics')) && (
+          {(currentFeature?.feature_type?.toUpperCase() === 'ANALYTICS' || currentFeature?.name === 'Analytics') && (
             <AnalyticsTestPresets
               onSelect={(preset: any) => {
                 setMethod(preset.method)

@@ -32,7 +32,9 @@ class FunctionHandler(FeatureHandler):
             restricted_globals = {
                 '__builtins__': {
                     'len': len, 'range': range, 'str': str, 'int': int,
-                    'float': float, 'list': list, 'dict': dict, 'print': print
+                    'float': float, 'list': list, 'dict': dict, 'print': print,
+                    'sum': sum, 'min': min, 'max': max, 'abs': abs, 'round': round,
+                    'any': any, 'all': all, 'enumerate': enumerate, 'zip': zip
                 }
             }
             # The code should now preferably define a function named 'handler'

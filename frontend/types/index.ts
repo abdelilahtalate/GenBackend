@@ -12,7 +12,7 @@ export interface Project {
 
 export interface Feature {
   id: string
-  name: "CRUD" | "Auth" | "Functions" | "Analytics" | "AI Endpoints" | "File Management" | "RBAC" | "Background Tasks"
+  name: string
   feature_type?: string // Matches backend type (e.g., 'crud', 'auth')
   mode: "manual" | "ai" | "mixed"
   status: "pending" | "configured" | "tested"
