@@ -1,0 +1,48 @@
+2026-01-05 13:44:50,718 - Handler found. Executing original code.
+2026-01-05 13:44:50,718 - Executing code:
+def handler(input_data):
+    return {'result': input_data.get('number1', 0) * input_data.get('number2', 0)}
+
+# Handle execution results
+if 'handler' in locals() and callable(locals()['handler']):
+    return jsonify(locals()['handler'](input_data))
+if 'result' in locals():
+    return jsonify(locals()['result'])
+return jsonify({'status': 'success'})
+2026-01-05 13:48:43,928 - Handler found. Executing original code.
+2026-01-05 13:48:43,929 - Executing code:
+def handler(input_data):
+    return {'result': input_data.get('number1', 0) * input_data.get('number2', 0)}
+
+# Handle execution results
+if 'handler' in locals() and callable(locals()['handler']):
+    return jsonify(locals()['handler'](input_data))
+if 'result' in locals():
+    return jsonify(locals()['result'])
+return jsonify({'status': 'success'})
+2026-01-05 13:48:52,471 - Handler found. Executing original code.
+2026-01-05 13:48:52,471 - Executing code:
+def handler(input_data):
+    return {'result': input_data.get('number1', 0) * input_data.get('number2', 0)}
+
+# Handle execution results
+if 'handler' in locals() and callable(locals()['handler']):
+    return jsonify(locals()['handler'](input_data))
+if 'result' in locals():
+    return jsonify(locals()['result'])
+return jsonify({'status': 'success'})
+2026-01-05 13:49:07,121 - Handler found. Executing original code.
+2026-01-05 13:49:07,121 - Executing code:
+def handler(input_data):
+    return {'result': input_data.get('number1', 0) * input_data.get('number2', 0)}
+
+# Handle execution results
+if 'handler' in locals() and callable(locals()['handler']):
+    return jsonify(locals()['handler'](input_data))
+if 'result' in locals():
+    return jsonify(locals()['result'])
+return jsonify({'status': 'success'})
+2026-01-05 13:54:53,846 - Handler found. Executing original code.
+2026-01-05 13:54:53,847 - Executing code:
+def handler(input_data):
+    return {'result': input_data.get('number1', 0) + input_data.get('number2', 0)
