@@ -1,0 +1,123 @@
+# Project Setup Guide (Beginner Friendly)
+
+This document provides step-by-step instructions for people who are new to programming to set up this project on their computer.
+
+---
+
+## 1. Install Required Software
+
+You need to download and install three main programs. Click the links below and follow the installation instructions on their websites.
+
+1.  **Python**: [Download Python 3.10 or newer](https://www.python.org/downloads/)
+    - *Note: During installation on Windows, make sure to check the box that says "Add Python to PATH".*
+2.  **Node.js**: [Download Node.js (LTS Version)](https://nodejs.org/)
+3.  **PostgreSQL (The Database)**: [Download PostgreSQL](https://www.postgresql.org/download/)
+    - Download the "Interactive Installer" for Windows/macOS.
+    - Follow the wizard. Remember the **Password** you set for the 'postgres' user; you will need it later!
+
+---
+
+## 2. Set Up the Database (PostgreSQL)
+
+Before running the code, we need to create a place for it to store data.
+
+1.  Open the program called **pgAdmin 4** (it was installed with PostgreSQL).
+2.  In the left sidebar, right-click on **Servers** -> **PostgreSQL [version]** and enter the password you chose during installation.
+3.  Right-click on **Databases** -> **Create** -> **Database...**
+4.  In the name field, type: `backend_gen2`
+5.  Click **Save**.
+
+---
+
+## 3. Set Up the Backend (The Brain)
+
+1.  Open your **Terminal** or **Command Prompt**.
+2.  Navigate to the project folder, then go into the backend folder:
+    ```bash
+    cd backend
+    ```
+3.  Create a "Virtual Environment" (this keeps the project's tools separate from your system):
+    ```bash
+    python -m venv venv
+    ```
+4.  Activate it:
+    - **Windows**: `venv\Scripts\activate`
+    - **macOS/Linux**: `source venv/bin/activate`
+5.  Install the project's requirements:
+    ```bash
+    pip install -r requirements.txt
+    ```
+
+### Configuration (The .env file)
+1.  In the `backend` folder, find a file named `.env`. Open it with a text editor (like Notepad).
+2.  Find the line starting with `DATABASE_URL`. It looks like this:
+    `DATABASE_URL=postgresql://postgres:password@localhost/backend_gen2`
+3.  **Crucial Step**: Replace `password` with the password you chose when you installed PostgreSQL.
+4.  If you have an OpenAI API Key, put it in the `OPENAI_API_KEY` line.
+5.  Save and close the file.
+
+---
+
+## 4. Set Up the Frontend (The Interface)
+
+1.  Open a **new** Terminal window.
+2.  Navigate to the `frontend` folder:
+    ```bash
+    cd frontend
+    ```
+3.  Install the interface tools:
+    ```bash
+    npm install
+    ```
+
+---
+
+## 5. Set Up the AI (Mistral)
+
+This project uses **Mistral** to generate code and configurations. You must have an AI server running locally.
+
+### Option A: Using Ollama (Recommended)
+1.  **Download Ollama**: Go to [ollama.com](https://ollama.com/) and download the installer for your OS.
+2.  **Install & Run**: Once installed, open your terminal and run:
+    ```bash
+    ollama run mistral
+    ```
+    *This will download the Mistral model and start the AI service. Keep this terminal open!*
+
+### Option B: Using Docker
+If you prefer Docker, you can run Ollama with this command:
+```bash
+docker run -d -v ollama:/root/.ollama -p 11434:11434 --name ollama ollama/ollama
+docker exec -it ollama ollama run mistral
+```
+
+---
+
+## 6. How to Run the Project
+
+You need to have three things running at the same time:
+
+1.  **Redis** (Used for background tasks):
+    - Make sure you have Redis installed and running (You can download it for Windows here: [Redis for Windows](https://github.com/tporadowski/redis/releases)).
+    - Simply run `redis-server` in a terminal.
+
+2.  **The Backend**:
+    - In your backend terminal (where you activated `venv`), run:
+    ```bash
+    python run.py
+    ```
+
+3.  **The Frontend**:
+    - In your frontend terminal, run:
+    ```bash
+    npm run dev
+    ```
+
+4.  **Final Step**: Open your web browser and go to: `http://localhost:3000`
+
+---
+
+## Troubleshooting
+
+- **Database Error?** Double-check your password in the `.env` file and make sure you created the `backend_gen2` database.
+- **Commands not found?** Make sure you restarted your terminal after installing Python and Node.js.
