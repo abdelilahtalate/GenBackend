@@ -136,11 +136,25 @@ class FeatureService:
         elif f_type in ['FUNCTIONS', 'FUNCTION']:
             f_path = config.get('endpoint_path', f"/{feature.name.lower().replace(' ', '_')}")
             method = config.get('http_method', 'POST').upper()
+            
+            # Generate a sample body from input_schema
+            input_schema = config.get('input_schema', {})
+            example_body = {}
+            if input_schema.get('type') == 'object' and 'properties' in input_schema:
+                for prop_name, prop_info in input_schema['properties'].items():
+                    p_type = prop_info.get('type', 'string')
+                    if p_type == 'number' or p_type == 'integer':
+                        example_body[prop_name] = 10
+                    elif p_type == 'boolean':
+                        example_body[prop_name] = True
+                    else:
+                        example_body[prop_name] = "test_value"
+            
             endpoints.append({
                 'method': method,
                 'path': f_path.lstrip('/'),
                 'description': config.get('description', f'Execute {feature.name}'),
-                'body': config.get('input_schema', {})
+                'body': example_body or {"input": "data"}
             })
         elif f_type == 'ANALYTICS':
             endpoints.append({
