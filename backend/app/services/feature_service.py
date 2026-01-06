@@ -139,7 +139,7 @@ class FeatureService:
             endpoints.append({
                 'method': method,
                 'path': f_path.lstrip('/'),
-                'description': feature.description or f'Execute {feature.name}',
+                'description': config.get('description', f'Execute {feature.name}'),
                 'body': config.get('input_schema', {})
             })
         elif f_type == 'ANALYTICS':

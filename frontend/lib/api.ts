@@ -252,9 +252,23 @@ export const functionsApi = {
   },
 
   create: async (data: any) => {
-    return apiRequest('/api/functions', {
+    return apiRequest('/api/features', {
       method: 'POST',
-      body: JSON.stringify(data),
+      body: JSON.stringify({
+        project_id: data.project_id,
+        name: data.name,
+        feature_type: 'FUNCTIONS',
+        generation_mode: data.generation_mode || 'manual',
+        configuration: {
+          description: data.description || "",
+          code: data.function_code || data.code || "",
+          path: data.endpoint_path || data.path || "",
+          method: data.http_method || data.method || "POST",
+          input_schema: data.input_schema || {},
+          output_schema: data.output_schema || {}
+        },
+        schema_definition: {},
+      }),
     });
   },
 

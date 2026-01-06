@@ -141,47 +141,24 @@ export default function WizardPage() {
       const existingResponse = await featuresApi.list(wizard.state.projectId)
       const existingFeatures = existingResponse.data?.features || []
 
-      const existingFunctionsResponse = await functionsApi.list(wizard.state.projectId)
-      const existingFunctions = existingFunctionsResponse.data?.functions || []
 
       for (const feature of wizard.state.selectedFeatures) {
-        // Check if this is a Function type feature
-        const isFunction = feature.name === "Functions" || feature.feature_type === "FUNCTIONS"
-
-        if (isFunction) {
-          // Save to custom_functions table
-          const exists = existingFunctions.find((f: any) => f.name === feature.config?.name)
-          if (!exists && feature.config) {
-            await functionsApi.create({
-              project_id: wizard.state.projectId,
-              name: feature.config.name || feature.name,
-              description: feature.config.description || "",
-              function_code: feature.config.code || "",
-              input_schema: feature.config.inputSchema || {},
-              output_schema: feature.config.outputSchema || {},
-              generation_mode: feature.mode,
-              endpoint_path: feature.config.endpoint || `/api/functions/${feature.config.name?.toLowerCase()}`,
-              http_method: feature.config.method || "POST"
-            })
-          }
+        // Save to features table (CRUD, Auth, Analytics, Functions, etc.)
+        const exists = existingFeatures.find((f: any) => f.name === feature.name)
+        if (!exists) {
+          await featuresApi.create({
+            project_id: wizard.state.projectId,
+            name: feature.name,
+            feature_type: feature.feature_type || feature.name.toLowerCase().replace(/\s+/g, "_"),
+            generation_mode: feature.mode,
+            configuration: feature.config || {},
+            schema_definition: {},
+          })
         } else {
-          // Save to features table (CRUD, Auth, Analytics, etc.)
-          const exists = existingFeatures.find((f: any) => f.name === feature.name)
-          if (!exists) {
-            await featuresApi.create({
-              project_id: wizard.state.projectId,
-              name: feature.name,
-              feature_type: feature.feature_type || feature.name.toLowerCase().replace(/\s+/g, "_"),
-              generation_mode: feature.mode,
-              configuration: feature.config || {},
-              schema_definition: {},
-            })
-          } else {
-            await featuresApi.update(exists.id, {
-              configuration: feature.config || {},
-              generation_mode: feature.mode,
-            })
-          }
+          await featuresApi.update(exists.id, {
+            configuration: feature.config || {},
+            generation_mode: feature.mode,
+          })
         }
       }
     } catch (error) {

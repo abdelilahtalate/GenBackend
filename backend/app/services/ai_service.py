@@ -32,24 +32,34 @@ class AIService:
             Rule 3: Always include an 'id' field as integer primary key if not specified.
             """
         elif feature_type == 'FUNCTIONS':
-            system_prompt = """You are a Senior Backend Engineer creating professional Custom Functions.
+            system_prompt = """You are a Backend Engineer creating simple, testable Custom Functions.
             Rule 1: Return ONLY valid JSON.
             Rule 2: The structure MUST be:
             {
                 "name": "function_name_snake_case",
                 "path": "/api/v1/custom/endpoint",
                 "method": "POST",
-                "code": "def handler(input_data):\\n    # Professional logic with validation\\n    val = input_data.get('key')\\n    if not val:\\n        return {'error': 'Missing key'}\\n    # ... logic result ...\\n    return {'success': True, 'data': ...}",
+                "code": "def handler(input_data):\\n    # Simple, clean logic\\n    result = input_data.get('key1') + input_data.get('key2')\\n    return {'result': result}",
                 "input_schema": { 
                     "type": "object", 
-                    "required": ["key"],
-                    "properties": { "key": { "type": "string", "description": "purpose of field" } } 
+                    "required": ["key1", "key2"],
+                    "properties": { 
+                        "key1": { "type": "number", "description": "First value" },
+                        "key2": { "type": "number", "description": "Second value" }
+                    } 
                 },
-                "output_schema": { "type": "object", "properties": { "success": { "type": "boolean" } } }
+                "output_schema": { 
+                    "type": "object", 
+                    "properties": { 
+                        "result": { "type": "number" } 
+                    } 
+                }
             }
-            Rule 3: CODE QUALITY. Avoid trivial logic. Implement realistic business processing (e.g., calculations, data transformation, validation logic).
-            Rule 4: Always use input_data.get() safely to avoid KeyErrors.
-            Example for 'Discount': Use logic that takes 'price' and 'percentage', validates they are numbers, calculates 'final_price', and returns a detailed breakdown.
+            Rule 3: KEEP IT SIMPLE. Generate clean, straightforward code that's easy to test.
+            Rule 4: Focus on the core business logic. Avoid complex validation - just use input_data.get() to safely access values.
+            Rule 5: Return a simple dictionary with the result. No need for 'success' flags or error handling unless specifically requested.
+            Example for 'Sum of two numbers': Take 'number1' and 'number2', add them, return {'sum': result}.
+            Example for 'Discount': Take 'price' and 'discount_percent', calculate discounted price, return {'discounted_price': result}.
             """
         elif feature_type == 'AUTH':
             system_prompt = """You are a backend configuration assistant for Authentication.

@@ -16,17 +16,31 @@ def create_feature():
     
     try:
         schema = FeatureCreateSchema(**data)
+        configuration = schema.configuration
+        
+        # Map field names for FUNCTIONS type
+        if schema.feature_type.upper() in ['FUNCTIONS', 'FUNCTION']:
+            # AI and frontend use: code, path, method
+            # Backend expects: function_code, endpoint_path, http_method
+            if 'code' in configuration and 'function_code' not in configuration:
+                configuration['function_code'] = configuration.pop('code')
+            if 'path' in configuration and 'endpoint_path' not in configuration:
+                configuration['endpoint_path'] = configuration.pop('path')
+            if 'method' in configuration and 'http_method' not in configuration:
+                configuration['http_method'] = configuration.pop('method')
+        
         result, status = FeatureService.create_feature(
             data.get('project_id'),
             schema.name,
             schema.feature_type,
             schema.generation_mode,
-            schema.configuration,
+            configuration,
             schema.schema_definition
         )
         return jsonify(result), status
     except Exception as e:
         return jsonify({'error': str(e)}), 400
+
 
 @features_bp.route('/project/<int:project_id>', methods=['GET'])
 @token_required
@@ -34,7 +48,23 @@ def create_feature():
 def get_project_features(project_id):
     """Get project features - MANUAL"""
     result, status = FeatureService.get_project_features(project_id)
+    
+    # Reverse map field names for FUNCTIONS type (for frontend compatibility)
+    if status == 200 and 'features' in result:
+        for feature in result['features']:
+            if feature.get('feature_type', '').upper() in ['FUNCTIONS', 'FUNCTION']:
+                config = feature.get('configuration', {})
+                # Backend stores: function_code, endpoint_path, http_method
+                # Frontend expects: code, path, method
+                if 'function_code' in config and 'code' not in config:
+                    config['code'] = config.get('function_code')
+                if 'endpoint_path' in config and 'path' not in config:
+                    config['path'] = config.get('endpoint_path')
+                if 'http_method' in config and 'method' not in config:
+                    config['method'] = config.get('http_method')
+    
     return jsonify(result), status
+
 
 @features_bp.route('/<int:feature_id>', methods=['PUT'])
 @token_required
@@ -42,8 +72,23 @@ def get_project_features(project_id):
 def update_feature(feature_id):
     """Update feature - MANUAL"""
     data = request.get_json()
+    
+    # Map field names for FUNCTIONS type if configuration is being updated
+    if 'configuration' in data:
+        from app.models.feature import Feature
+        feature = Feature.query.get(feature_id)
+        if feature and feature.feature_type.upper() in ['FUNCTIONS', 'FUNCTION']:
+            config = data['configuration']
+            if 'code' in config and 'function_code' not in config:
+                config['function_code'] = config.pop('code')
+            if 'path' in config and 'endpoint_path' not in config:
+                config['endpoint_path'] = config.pop('path')
+            if 'method' in config and 'http_method' not in config:
+                config['http_method'] = config.pop('method')
+    
     result, status = FeatureService.update_feature(feature_id, **data)
     return jsonify(result), status
+
 
 @features_bp.route('/<int:feature_id>', methods=['DELETE'])
 @token_required
